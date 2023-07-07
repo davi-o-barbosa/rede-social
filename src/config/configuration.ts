@@ -18,4 +18,7 @@ export default () => ({
   database: {
     uri: assembleUri(),
   },
+  bcrypt: {
+    saltRounds: process.env.SALT_ROUNDS || 10,
+  },
 });
