@@ -19,6 +19,6 @@ export default () => ({
     uri: assembleUri(),
   },
   bcrypt: {
-    saltRounds: process.env.SALT_ROUNDS || 10,
+    saltRounds: Number(process.env.SALT_ROUNDS) || 10,
   },
 });
