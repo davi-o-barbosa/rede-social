@@ -1,10 +1,16 @@
-import { Injectable, ConflictException } from '@nestjs/common/';
+import {
+  Injectable,
+  ConflictException,
+  UnauthorizedException,
+  NotFoundException,
+} from '@nestjs/common/';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User } from 'src/users/schemas/user.schema';
 import { CreateUserDto } from './dto/createUser.dto';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
+import { LoginUserDto } from './dto/loginUser.dto';
 
 @Injectable()
 export class AuthService {
@@ -33,5 +39,21 @@ export class AuthService {
     newUserData.password = await bcrypt.hash(newUserData.password, saltRounds);
     const newUser = new this.userModel(newUserData);
     return newUser.save();
+  }
+
+  async login(loginData: LoginUserDto) {
+    const user = await this.userModel.findOne(
+      loginData.email
+        ? { email: loginData.email }
+        : { username: loginData.username },
+    );
+
+    if (!user) throw new NotFoundException();
+
+    if (await bcrypt.compare(loginData.password, user.password)) {
+      return 'Passou, filho da puta.';
+    } else {
+      throw new UnauthorizedException();
+    }
   }
 }

@@ -6,8 +6,4 @@ import { Model } from 'mongoose';
 @Injectable()
 export class UsersService {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
-
-  findAll() {
-    return 'TESTE';
-  }
 }
