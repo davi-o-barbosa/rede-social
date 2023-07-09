@@ -2,7 +2,6 @@ function assembleUri() {
   const host = process.env.DATABASE_HOST || 'localhost';
   const port = process.env.DATABASE_PORT || '27017';
   const name = process.env.DATABASE_NAME;
-
   const user = process.env.DATABASE_USER;
   const password = process.env.DATABASE_PASSWORD;
   const login = user && password ? `${user}:${password}@` : '';

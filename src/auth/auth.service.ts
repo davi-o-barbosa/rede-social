@@ -11,12 +11,14 @@ import { CreateUserDto } from './dto/createUser.dto';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
 import { LoginUserDto } from './dto/loginUser.dto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectModel(User.name) private userModel: Model<User>,
     private configService: ConfigService,
+    private jwtService: JwtService,
   ) {}
 
   async create(newUserData: CreateUserDto) {
@@ -38,7 +40,11 @@ export class AuthService {
 
     newUserData.password = await bcrypt.hash(newUserData.password, saltRounds);
     const newUser = new this.userModel(newUserData);
-    return newUser.save();
+
+    return await this.jwtService.signAsync({
+      uuid: newUser._id,
+      username: newUser.username,
+    });
   }
 
   async login(loginData: LoginUserDto) {
@@ -51,7 +57,10 @@ export class AuthService {
     if (!user) throw new NotFoundException();
 
     if (await bcrypt.compare(loginData.password, user.password)) {
-      return 'Passou, filho da puta.';
+      return await this.jwtService.signAsync({
+        uuid: user._id,
+        username: user.username,
+      });
     } else {
       throw new UnauthorizedException();
     }
