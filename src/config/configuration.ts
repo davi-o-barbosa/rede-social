@@ -21,4 +21,8 @@ export default () => ({
   bcrypt: {
     saltRounds: Number(process.env.SALT_ROUNDS) || 10,
   },
+  jwt: {
+    expiresIn: process.env.EXPIRE_TIME || '60s',
+    secret: process.env.SECRET || 'SUPER_SECRET_CODE',
+  },
 });
