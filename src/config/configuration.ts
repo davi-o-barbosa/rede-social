@@ -10,7 +10,7 @@ function assembleUri() {
 }
 
 export default () => ({
-  node_env: process.env.NODE_ENV,
+  node_env: process.env.NODE_ENV || 'development',
   server: {
     port: Number(process.env.SERVER_PORT) || 3000,
   },
