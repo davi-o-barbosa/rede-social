@@ -10,12 +10,12 @@ import {
 export class LoginUserDto {
   @IsEmail()
   @IsOptional()
-  email: string;
+  email?: string;
 
   @ValidateIf((o) => !o.email)
   @IsString()
   @MaxLength(16)
-  username: string;
+  username?: string;
 
   @IsString()
   @IsNotEmpty()
