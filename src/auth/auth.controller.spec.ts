@@ -33,8 +33,12 @@ describe('AuthController', () => {
     authService = module.get(AuthService);
   });
 
+  it('should be defined', () => {
+    expect(authController).toBeDefined();
+  });
+
   describe('register', () => {
-    it('it should call AuthService.create', async () => {
+    it('should call AuthService.create', async () => {
       const expectedValue = 'register';
       authService.create.mockResolvedValue(expectedValue);
       const register = authController.register(userRegisterStub);
@@ -43,7 +47,7 @@ describe('AuthController', () => {
   });
 
   describe('login', () => {
-    it('it should call AuthService.login', async () => {
+    it('should call AuthService.login', async () => {
       const expectedValue = 'login';
       authService.login.mockResolvedValue(expectedValue);
       const login = authController.login(userLoginStub);
