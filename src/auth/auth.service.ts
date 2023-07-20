@@ -42,10 +42,10 @@ export class AuthService {
     const newUser = await this.userModel.create(newUserData);
     await newUser.save();
 
-    return await this.jwtService.signAsync({
-      uuid: newUser._id,
+    return {
       username: newUser.username,
-    });
+      userId: newUser.id as string,
+    };
   }
 
   async login(loginData: LoginUserDto) {
@@ -58,10 +58,11 @@ export class AuthService {
     if (!user) throw new NotFoundException();
 
     if (await bcrypt.compare(loginData.password, user.password)) {
-      return await this.jwtService.signAsync({
+      const token = await this.jwtService.signAsync({
         uuid: user._id,
         username: user.username,
       });
+      return { access_token: token };
     } else {
       throw new UnauthorizedException();
     }
