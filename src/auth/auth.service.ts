@@ -39,7 +39,7 @@ export class AuthService {
     const saltRounds = this.configService.get('bcrypt.saltRounds');
 
     newUserData.password = await bcrypt.hash(newUserData.password, saltRounds);
-    const newUser = new this.userModel(newUserData);
+    const newUser = await this.userModel.create(newUserData);
     await newUser.save();
 
     return await this.jwtService.signAsync({
