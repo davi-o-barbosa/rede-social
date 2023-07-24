@@ -3,9 +3,9 @@ import { AuthService } from './auth.service';
 import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { ConfigService } from '@nestjs/config';
 import { getModelToken } from '@nestjs/mongoose';
-import { User } from '../users/schemas/user.schema';
+import { User, UserDocument } from '../users/schemas/user.schema';
 import { JwtService } from '@nestjs/jwt';
-import { Model } from 'mongoose';
+import { Document, Model } from 'mongoose';
 import { CreateUserDto } from './dto/createUser.dto';
 import {
   ConflictException,
@@ -13,8 +13,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
-
-const jwtResponse = 'jwt token';
 
 const userMocks: { [key: string]: CreateUserDto } = {
   newUser: {
@@ -80,7 +78,7 @@ describe('AuthService', () => {
     });
 
     // Always return 'jwt token' on sign
-    jwtService.signAsync.mockResolvedValue(jwtResponse);
+    jwtService.signAsync.mockResolvedValue('');
 
     // Mock compare for bcrypt
     jest
@@ -93,51 +91,54 @@ describe('AuthService', () => {
   });
 
   describe('create', () => {
-    it('should create a new user', async () => {
-      const createUser = authService.create(userMocks.newUser);
-      await expect(createUser).resolves.toBe(jwtResponse);
+    it('Should create a new user', async () => {
+      const response = await authService.create(userMocks.newUser);
+      expect(response.username).toBe(userMocks.newUser.username);
     });
 
-    it('should throw a conflict exception - email', async () => {
+    it('Should throw ConflictException [EMAIL]', async () => {
       const createUser = authService.create(userMocks.user);
       await expect(createUser).rejects.toBeInstanceOf(ConflictException);
     });
 
-    it('should throw a conflict exception - username', async () => {
+    it('Should throw ConflictException [Username]', async () => {
       const createUser = authService.create(userMocks.sameUsername);
       await expect(createUser).rejects.toBeInstanceOf(ConflictException);
     });
   });
 
   describe('login', () => {
-    it('should login user - username', async () => {
+    it('Should login user [USERNAME]', async () => {
       const user = userMocks.user;
-      const loginUser = authService.login({
+      const response = await authService.login({
         username: user.username,
         password: user.password,
       });
-      await expect(loginUser).resolves.toBe(jwtResponse);
+
+      expect(response.access_token).toBeDefined();
     });
 
-    it('should login user - email', async () => {
+    it('Should login user [EMAIL]', async () => {
       const user = userMocks.user;
-      const loginUser = authService.login({
+      const response = await authService.login({
         email: user.email,
         password: user.password,
       });
-      await expect(loginUser).resolves.toBe(jwtResponse);
+
+      expect(response.access_token).toBeDefined();
     });
 
-    it('should throw not found', async () => {
+    it('Should throw NotFoundException', async () => {
       const user = userMocks.newUser;
       const loginUser = authService.login({
         email: user.email,
         password: user.password,
       });
+
       await expect(loginUser).rejects.toBeInstanceOf(NotFoundException);
     });
 
-    it('should throw unauthorized', async () => {
+    it('Should throw UnauthorizedException', async () => {
       const user = userMocks.user;
       const loginUser = authService.login({
         email: user.email,

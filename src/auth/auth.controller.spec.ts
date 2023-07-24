@@ -5,17 +5,16 @@ import { AuthService } from './auth.service';
 import { CreateUserDto } from './dto/createUser.dto';
 import { LoginUserDto } from './dto/loginUser.dto';
 
-const userRegisterStub: CreateUserDto = {
+const userMock: CreateUserDto = {
+  username: 'test',
   email: 'test@test.com',
   displayName: 'Test',
-  username: 'test',
   password: '12345678',
 };
 
-const userLoginStub: LoginUserDto = {
-  username: 'test',
-  email: 'test@test.com',
-  password: '12345678',
+const userLoginMock: LoginUserDto = {
+  username: userMock.username,
+  password: userMock.password,
 };
 
 describe('AuthController', () => {
@@ -39,19 +38,15 @@ describe('AuthController', () => {
 
   describe('register', () => {
     it('should call AuthService.create', async () => {
-      const expectedValue = 'register';
-      authService.create.mockResolvedValue(expectedValue);
-      const register = authController.register(userRegisterStub);
-      await expect(register).resolves.toBe('register');
+      await authController.register(userMock);
+      expect(authService.create).toHaveBeenCalled();
     });
   });
 
   describe('login', () => {
     it('should call AuthService.login', async () => {
-      const expectedValue = 'login';
-      authService.login.mockResolvedValue(expectedValue);
-      const login = authController.login(userLoginStub);
-      await expect(login).resolves.toBe('login');
+      await authController.login(userLoginMock);
+      expect(authService.login).toHaveBeenCalled();
     });
   });
 });
