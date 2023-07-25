@@ -8,7 +8,9 @@ import configuration from './config/configuration';
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: `./src/config/environments/${process.env.NODE_ENV}.env`,
+      envFilePath: `./src/config/environments/${
+        process.env.NODE_ENV ?? 'development'
+      }.env`,
       load: [configuration],
     }),
     MongooseModule.forRootAsync({

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common/';
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User } from 'src/users/schemas/user.schema';
+import { User } from '../users/schemas/user.schema';
 import { CreateUserDto } from './dto/createUser.dto';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
@@ -37,14 +37,14 @@ export class AuthService {
     }
 
     const saltRounds = this.configService.get('bcrypt.saltRounds');
-
     newUserData.password = await bcrypt.hash(newUserData.password, saltRounds);
-    const newUser = new this.userModel(newUserData);
+    const newUser = await this.userModel.create(newUserData);
+    await newUser.save();
 
-    return await this.jwtService.signAsync({
-      uuid: newUser._id,
+    return {
       username: newUser.username,
-    });
+      userId: newUser.id as string,
+    };
   }
 
   async login(loginData: LoginUserDto) {
@@ -57,10 +57,11 @@ export class AuthService {
     if (!user) throw new NotFoundException();
 
     if (await bcrypt.compare(loginData.password, user.password)) {
-      return await this.jwtService.signAsync({
+      const token = await this.jwtService.signAsync({
         uuid: user._id,
         username: user.username,
       });
+      return { access_token: token };
     } else {
       throw new UnauthorizedException();
     }
