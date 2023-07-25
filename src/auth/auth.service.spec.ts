@@ -3,9 +3,9 @@ import { AuthService } from './auth.service';
 import { DeepMocked, createMock } from '@golevelup/ts-jest';
 import { ConfigService } from '@nestjs/config';
 import { getModelToken } from '@nestjs/mongoose';
-import { User, UserDocument } from '../users/schemas/user.schema';
+import { User } from '../users/schemas/user.schema';
 import { JwtService } from '@nestjs/jwt';
-import { Document, Model } from 'mongoose';
+import { Model } from 'mongoose';
 import { CreateUserDto } from './dto/createUser.dto';
 import {
   ConflictException,
