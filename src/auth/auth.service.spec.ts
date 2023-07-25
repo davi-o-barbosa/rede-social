@@ -77,6 +77,11 @@ describe('AuthService', () => {
       } else return null;
     });
 
+    // Mocking create function
+    userModel.create.mockImplementation((data: CreateUserDto) => {
+      return { ...data, save: jest.fn() } as any;
+    });
+
     // Always return 'jwt token' on sign
     jwtService.signAsync.mockResolvedValue('');
 
