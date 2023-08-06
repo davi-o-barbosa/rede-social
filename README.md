@@ -1,27 +1,10 @@
-[![Testing](https://github.com/deiveria/rede-social/actions/workflows/testing.yml/badge.svg?branch=main)](https://github.com/deiveria/rede-social/actions/workflows/testing.yml)
-[![Build](https://github.com/deiveria/rede-social/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/deiveria/rede-social/actions/workflows/build.yml)
-[![codecov](https://codecov.io/gh/deiveria/rede-social/branch/main/graph/badge.svg?token=3SB7NVR01M)](https://codecov.io/gh/deiveria/rede-social)
 # Rede Social
 
 ## Description
+A mock of a social network application, made using Nest.JS and Angular
 
-API for my social network project built with [Nest](https://github.com/nestjs/nest) framework.
+## Structure
+Instrutions on how to build and run are inside the `README.md` of each folder.
+- `/server` contains the API
+- `/client` contains the client
 
-## Installation
-
-```bash
-$ npm install
-```
-
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
-```

@@ -1,15 +1,13 @@
-name: Testing
+name: Testing Server
 
-on:
-  push:
-    branches: [main]
-  pull_request:
-    branches: [main]
+on: [push]
 
 jobs:
   test:
     runs-on: ubuntu-latest
-
+    defaults:
+      run:
+        working-directory: ./server
     steps:
       - uses: actions/checkout@v3
       - uses: actions/setup-node@v3
