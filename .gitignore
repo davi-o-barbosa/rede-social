@@ -7,6 +7,9 @@
 
 # compiled output
 **/dist
+**/tmp
+**/out-tsc
+**/bazel-out
 
 # node modules
 **/node_modules
@@ -26,3 +29,11 @@
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# Miscellaneous
+**/.angular/cache
+**.sass-cache/
+**/connect.lock
+**/libpeerconnection.log
+**testem.log
+**/typings
